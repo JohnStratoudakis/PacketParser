@@ -14,7 +14,7 @@ class Ethernet:
     def getSourceMac(self):
         return self.convertToHex(self.sourceMac)
 
-    def getEtherType(self):
+    def getEtherTypeStr(self):
         etherType = int(int(self.etherType[0] << 8) | int(self.etherType[1]))
         res = "{0} ".format(str(hex(etherType)))
         if etherType == 0x806:
@@ -22,6 +22,10 @@ class Ethernet:
         elif etherType == 0x800:
             res += "(IPv4)"
         return res
+
+    def getEtherType(self):
+        etherType = int(int(self.etherType[0] << 8) | int(self.etherType[1]))
+        return etherType
 
     def parse(self):
         self.destMac = self.inPkt[0:6]
@@ -39,14 +43,14 @@ class Ethernet:
         print("------------------------------")
         print("Dest MAC:   \t" + self.getDestMac())
         print("Source MAC: \t" + self.getSourceMac())
-        print("EtherType:  \t" + self.getEtherType())
+        print("EtherType:  \t" + self.getEtherTypeStr())
         print("Payload:")
 
         payloadStr = "\n\t"
         for x in range(len(self.payload)):
             payloadStr += "0x{:02x} ".format(self.payload[x])
             if not (x+1) % 8:
-                payloadStr += "\n\t".format(x)
+                payloadStr += "\n\t"
 
         print("{0}".format(payloadStr))
         bArr = bytes(self.inPkt)

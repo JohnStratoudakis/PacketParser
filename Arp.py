@@ -35,4 +35,3 @@ class Arp:
         print("SPA: {0}".format( self.payload[14:18]) )
         print("THA: {0}".format( " ".join(  map(hex, map(int,self.payload[18:24]))) ))
         print("TPA: {0}".format( self.payload[24:26]) )
-
