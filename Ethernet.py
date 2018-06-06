@@ -34,25 +34,24 @@ class Ethernet:
         self.payload = self.inPkt[14:]
 
     def getPayload(self):
-        #return self.convertToHex(self.payload)
         return self.payload
 
-    def dump(self):
+    def dump(self, includePayload=True):
         print("------------------------------")
         print("Dumping Ethernet Frame info")
         print("------------------------------")
         print("Dest MAC:   \t" + self.getDestMac())
         print("Source MAC: \t" + self.getSourceMac())
         print("EtherType:  \t" + self.getEtherTypeStr())
-        print("Payload:")
+        if includePayload:
+            print("Payload:")
+            payloadStr = "\n\t"
+            for x in range(len(self.payload)):
+                payloadStr += "0x{:02x}, ".format(self.payload[x])
+                if not (x+1) % 8:
+                    payloadStr += "\n\t"
+            print("{0}".format(payloadStr))
 
-        payloadStr = "\n\t"
-        for x in range(len(self.payload)):
-            payloadStr += "0x{:02x} ".format(self.payload[x])
-            if not (x+1) % 8:
-                payloadStr += "\n\t"
-
-        print("{0}".format(payloadStr))
         bArr = bytes(self.inPkt)
         import zlib
         crc32 = zlib.crc32(bArr) & 0xFFFFFFFF

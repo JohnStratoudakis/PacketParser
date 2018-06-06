@@ -19,18 +19,33 @@
 
 class Arp:
 
+    def joinTo16(self, hi, lo):
+        return (hi << 8) | (lo)
+
     def __init__(self, inPayload):
         self.payload = inPayload
+        self.parse()
+
+    def parse(self):
+        self.htype = self.joinTo16(self.payload[0], self.payload[1])
+        self.ptype = self.joinTo16(self.payload[2], self.payload[3])
+        self.hlen = self.payload[4]
+        self.plen = self.payload[5]
+        self.oper = self.joinTo16(self.payload[6], self.payload[7])
+        self.sha = self.payload[8:14]
+        self.spa = self.payload[14:18]
+        self.tha = self.payload[18:24]
+        self.tpa = self.payload[24:26]
 
     def dump(self):
         print("------------------------------")
         print("Dumping ARP packet info")
         print("------------------------------")
-        print("HTYPE: {0}".format( self.payload[0:2]))
-        print("PTYPE: {0}".format( self.payload[2:4]))
-        print("HLEN: {0}".format( self.payload[4]))
-        print("PLEN: {0}".format( self.payload[5]))
-        print("OPER: {0}".format( self.payload[6:8]))
+        print("HTYPE: {0}".format( self.htype ))
+        print("PTYPE: {0}".format( self.ptype ))
+        print("HLEN: {0}".format( self.hlen ))
+        print("PLEN: {0}".format( self.plen ))
+        print("OPER: {0}".format( self.oper ))
         print("SHA: {0}".format( " ".join(  map(hex, map(int,self.payload[8:14]))) ))
         print("SPA: {0}".format( self.payload[14:18]) )
         print("THA: {0}".format( " ".join(  map(hex, map(int,self.payload[18:24]))) ))

@@ -42,7 +42,7 @@ class IPv4:
         dataPayload = self.payload[payloadStartIndex:totalLength]
         return dataPayload
 
-    def dump(self):
+    def dump(self, includePayload=True):
         print("------------------------------")
         print("Dumping IPV4 packet info")
         print("------------------------------")
@@ -50,7 +50,7 @@ class IPv4:
         # IHL number of 32 bit words for header length
         IHL = (self.payload[0] & 0xF)
         print("IHL: {0}".format( hex( IHL ) ) )
-        print("IHL: {0}".format( hex( self.payload[0] & 0xF) ) )
+ #       print("IHL: {0}".format( hex( self.payload[0] & 0xF) ) )
         print("DSCP: {0}".format( hex( self.payload[1] & 0xF) ) )
         print("ECN: {0}".format( hex( self.payload[1] & 0xF) ) )
         totalLength = (self.payload[2] << 8) | self.payload[3]
@@ -77,10 +77,11 @@ class IPv4:
         payloadStartIndex = 20
         if IHL > 5:
             print("IHL is greater than 5")
-        print("Payload")
-        payloadStr = "\n\t"
-        for i in range(payloadStartIndex, totalLength - 0):
-            payloadStr += "0x{:02x} ".format(self.payload[i])
-            if not (i-(payloadStartIndex)+1) % 8:
-                payloadStr += "\n\t"
-        print("{0}".format(payloadStr))
+        if includePayload:
+            print("Payload")
+            payloadStr = "\n\t"
+            for i in range(payloadStartIndex, totalLength - 0):
+                payloadStr += "0x{:02x}, ".format(self.payload[i])
+                if not (i-(payloadStartIndex)+1) % 8:
+                    payloadStr += "\n\t"
+            print("{0}".format(payloadStr))

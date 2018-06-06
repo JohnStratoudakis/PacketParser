@@ -1,5 +1,13 @@
 import unittest
 
+# +----------------------------------------------------------------------------+
+# |         Source Port                 |         Destination Port             |
+# +----------------------------------------------------------------------------+
+# |         Checksum                    |         Total Length                 |
+# +----------------------------------------------------------------------------+
+# |                              Payload                                       |
+# +----------------------------------------------------------------------------+
+
 from Udp import Udp
 
 class UdpTests(unittest.TestCase):
@@ -25,6 +33,8 @@ class UdpTests(unittest.TestCase):
         self.assertEqual(udp.getSourcePort(), 5353)
         self.assertEqual(udp.getDestinationPort(), 5353)
         self.assertEqual(udp.getLength(), 70)
+        self.assertEqual(udp.getChecksum(), 0x64be)
+        self.assertEqual(udp.getPayload()[0], 0x0)
 
     def test_smoke(self):
         self.assertEqual(1, 1)
